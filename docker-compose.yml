@@ -1,0 +1,42 @@
+version: '2.4'
+
+services:
+  fail2ban:
+    image: ${IMAGE_NAME:-crazymax/fail2ban}:${IMAGE_TAG:-latest}
+    environment:
+      - TZ
+      - F2B_LOG_LEVEL
+      - F2B_DB_PURGE_AGE
+      - F2B_MAX_RETRY
+      - F2B_DEST_EMAIL
+      - F2B_SENDER
+      - F2B_ACTION
+      - F2B_IPTABLES_CHAIN
+      - SSMTP_HOST
+      - SSMTP_PORT
+      - SSMTP_HOSTNAME
+      - SSMTP_USER
+      - SSMTP_PASSWORD
+      - SSMTP_TLS
+    network_mode: host
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    volumes:
+      - data-vol:/data
+      - ./config:/config
+      - traefik-log-vol:/log/traefik:ro
+      - backup-reader-log-vol:/log/backup-reader:ro
+    restart: always
+    mem_limit: ${FAIL2BAN_MEM_LIMIT:-64M}
+    mem_reservation: ${FAIL2BAN_MEM_RESERVATION:-52M}
+
+volumes:
+  data-vol:
+    name: ${FAIL2BAN_DATA_VOL_NAME:-fail2ban-data-vol}
+
+  traefik-log-vol:
+    name: ${TRAEFIK_LOG_VOL_NAME:-traefik-log-vol}
+
+  backup-reader-log-vol:
+    name: ${BACKUP_READER_LOG_VOL_NAME:-backup-log-vol}
