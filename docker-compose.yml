@@ -3,6 +3,7 @@ version: '2.4'
 services:
   fail2ban:
     image: ${IMAGE_NAME:-crazymax/fail2ban}:${IMAGE_TAG:-latest}
+    container_name: fail2ban
     environment:
       - TZ
       - F2B_LOG_LEVEL
@@ -24,12 +25,11 @@ services:
       - NET_RAW
     volumes:
       - data-vol:/data
-      - ./config:/config
+      - ./config:/config:ro
       - traefik-log-vol:/log/traefik:ro
-      - backup-reader-log-vol:/log/backup-reader:ro
     restart: always
-    mem_limit: ${FAIL2BAN_MEM_LIMIT:-64M}
-    mem_reservation: ${FAIL2BAN_MEM_RESERVATION:-52M}
+    mem_limit: ${FAIL2BAN_MEM_LIMIT:-32M}
+    mem_reservation: ${FAIL2BAN_MEM_RESERVATION:-16M}
 
 volumes:
   data-vol:
@@ -37,6 +37,3 @@ volumes:
 
   traefik-log-vol:
     name: ${TRAEFIK_LOG_VOL_NAME:-traefik-log-vol}
-
-  backup-reader-log-vol:
-    name: ${BACKUP_READER_LOG_VOL_NAME:-backup-log-vol}
