@@ -1,35 +1,37 @@
-version: '2.4'
+version: '3.7'
 
 services:
   fail2ban:
     image: ${IMAGE_NAME:-crazymax/fail2ban}:${IMAGE_TAG:-latest}
-    container_name: fail2ban
+    container_name: ${FAIL2BAN_CONTAINER_NAME:-fail2ban}
     environment:
-      - TZ
-      - F2B_LOG_LEVEL
-      - F2B_DB_PURGE_AGE
-      - F2B_MAX_RETRY
-      - F2B_DEST_EMAIL
-      - F2B_SENDER
-      - F2B_ACTION
-      - F2B_IPTABLES_CHAIN
-      - SSMTP_HOST
-      - SSMTP_PORT
-      - SSMTP_HOSTNAME
-      - SSMTP_USER
-      - SSMTP_PASSWORD
-      - SSMTP_TLS
+      TZ:
+      F2B_LOG_LEVEL:
+      F2B_DB_PURGE_AGE:
+      F2B_MAX_RETRY:
+      F2B_DEST_EMAIL:
+      F2B_SENDER:
+      F2B_ACTION:
+      F2B_IPTABLES_CHAIN:
+      SSMTP_HOSTNAME:
+      SSMTP_HOST:
+      SSMTP_PORT:
+      SSMTP_USER:
+      SSMTP_PASSWORD:
+      SSMTP_TLS:
     network_mode: host
     cap_add:
       - NET_ADMIN
       - NET_RAW
     volumes:
       - data-vol:/data
-      - ./config:/config:ro
       - traefik-log-vol:/log/traefik:ro
+    secrets:
+      - source: filter-traefik
+        target: /data/filter.d/traefik2.conf
+      - source: jail-traefik
+        target: /data/jail.d/traefik2.conf
     restart: always
-    mem_limit: ${FAIL2BAN_MEM_LIMIT:-32M}
-    mem_reservation: ${FAIL2BAN_MEM_RESERVATION:-16M}
 
 volumes:
   data-vol:
@@ -37,3 +39,13 @@ volumes:
 
   traefik-log-vol:
     name: ${TRAEFIK_LOG_VOL_NAME:-traefik-log-vol}
+    external: true
+
+secrets:
+  filter-traefik:
+    name: ${FAIL2BAN_FILTER_TRAEFIK_SECRET_NAME:-f2b-filter-traefik}
+    file: ./config/filter.d/traefik.conf
+
+  jail-traefik:
+    name: ${FAIL2BAN_JAIL_TRAEFIK_SECRET_NAME:-f2b-jail-traefik}
+    file: ./config/jail.d/traefik.conf
