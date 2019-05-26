@@ -1,41 +1,65 @@
 version: '3.7'
 
+x-fail2ban:
+  &fail2ban-common
+  image: ${IMAGE_NAME:-crazymax/fail2ban}:${IMAGE_TAG:-latest}
+  network_mode: host
+  cap_add:
+    - NET_ADMIN
+    - NET_RAW
+  restart: always
+
+x-environment:
+  &environment-common
+  TZ:
+  F2B_LOG_LEVEL:
+  F2B_DB_PURGE_AGE:
+  F2B_MAX_RETRY:
+  F2B_DEST_EMAIL:
+  F2B_SENDER:
+  F2B_ACTION:
+  SSMTP_HOSTNAME:
+  SSMTP_HOST:
+  SSMTP_PORT:
+  SSMTP_USER:
+  SSMTP_PASSWORD:
+  SSMTP_TLS:
+
 services:
-  fail2ban:
-    image: ${IMAGE_NAME:-crazymax/fail2ban}:${IMAGE_TAG:-latest}
-    container_name: ${FAIL2BAN_CONTAINER_NAME:-fail2ban}
+  fail2ban-input:
+    << : *fail2ban-common
+    container_name: ${FAIL2BAN_INPUT_CONTAINER_NAME:-fail2ban-input}
     environment:
-      TZ:
-      F2B_LOG_LEVEL:
-      F2B_DB_PURGE_AGE:
-      F2B_MAX_RETRY:
-      F2B_DEST_EMAIL:
-      F2B_SENDER:
-      F2B_ACTION:
-      F2B_IPTABLES_CHAIN:
-      SSMTP_HOSTNAME:
-      SSMTP_HOST:
-      SSMTP_PORT:
-      SSMTP_USER:
-      SSMTP_PASSWORD:
-      SSMTP_TLS:
-    network_mode: host
-    cap_add:
-      - NET_ADMIN
-      - NET_RAW
+      << : *environment-common
+      F2B_IPTABLES_CHAIN: INPUT
     volumes:
-      - data-vol:/data
+      - data-input-vol:/data
+      - ${SSH_AUTH_LOG_PATH:-/var/log/auth.log}:/log/auth.log:ro
+    secrets:
+      - source: jail-ssh
+        target: /data/jail.d/ssh.conf
+
+  fail2ban-docker:
+    << : *fail2ban-common
+    container_name: ${FAIL2BAN_DOCKER_CONTAINER_NAME:-fail2ban-docker}
+    environment:
+      << : *environment-common
+      F2B_IPTABLES_CHAIN: DOCKER-USER
+    volumes:
+      - data-docker-vol:/data
       - traefik-log-vol:/log/traefik:ro
     secrets:
       - source: filter-traefik
-        target: /data/filter.d/traefik2.conf
+        target: /data/filter.d/traefik.conf
       - source: jail-traefik
-        target: /data/jail.d/traefik2.conf
-    restart: always
+        target: /data/jail.d/traefik.conf
 
 volumes:
-  data-vol:
-    name: ${FAIL2BAN_DATA_VOL_NAME:-fail2ban-data-vol}
+  data-input-vol:
+    name: ${FAIL2BAN_DATA_INPUT_VOL_NAME:-fail2ban-data-input-vol}
+
+  data-docker-vol:
+    name: ${FAIL2BAN_DATA_DOCKER_VOL_NAME:-fail2ban-data-docker-vol}
 
   traefik-log-vol:
     name: ${TRAEFIK_LOG_VOL_NAME:-traefik-log-vol}
@@ -43,9 +67,10 @@ volumes:
 
 secrets:
   filter-traefik:
-    name: ${FAIL2BAN_FILTER_TRAEFIK_SECRET_NAME:-f2b-filter-traefik}
     file: ./config/filter.d/traefik.conf
 
   jail-traefik:
-    name: ${FAIL2BAN_JAIL_TRAEFIK_SECRET_NAME:-f2b-jail-traefik}
     file: ./config/jail.d/traefik.conf
+
+  jail-ssh:
+    file: ./config/jail.d/ssh.conf
