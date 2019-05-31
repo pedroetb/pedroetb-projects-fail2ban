@@ -48,11 +48,14 @@ services:
     volumes:
       - data-docker-vol:/data
       - traefik-log-vol:/log/traefik:ro
+      - mail-log-vol:/log/mail:ro
     secrets:
       - source: filter-traefik
         target: /data/filter.d/traefik.conf
       - source: jail-traefik
         target: /data/jail.d/traefik.conf
+      - source: jail-mail
+        target: /data/jail.d/mail.conf
 
 volumes:
   data-input-vol:
@@ -65,6 +68,10 @@ volumes:
     name: ${TRAEFIK_LOG_VOL_NAME:-traefik-log-vol}
     external: true
 
+  mail-log-vol:
+    name: ${MAIL_LOG_VOL_NAME:-mail-log-vol}
+    external: true
+
 secrets:
   filter-traefik:
     file: ./config/filter.d/traefik.conf
@@ -74,3 +81,6 @@ secrets:
 
   jail-ssh:
     file: ./config/jail.d/ssh.conf
+
+  jail-mail:
+    file: ./config/jail.d/mail.conf
