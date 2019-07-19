@@ -34,7 +34,7 @@ services:
       F2B_IPTABLES_CHAIN: INPUT
     volumes:
       - data-input-vol:/data
-      - ${SSH_AUTH_LOG_PATH:-/var/log/auth.log}:/log/auth.log:ro
+      - ${SSH_LOG_PATH:-/var/log}:/log/ssh:ro
     secrets:
       - source: jail-ssh
         target: /data/jail.d/ssh.conf
