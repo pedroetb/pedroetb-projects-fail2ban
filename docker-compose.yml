@@ -43,7 +43,7 @@ x-environment:
 services:
   fail2ban-input:
     << : *fail2ban-common
-    container_name: ${FAIL2BAN_INPUT_CONTAINER_NAME:-fail2ban-input}
+    container_name: ${INPUT_CONTAINER_NAME:-fail2ban-input}
     environment:
       << : *environment-common
       F2B_IPTABLES_CHAIN: INPUT
@@ -58,7 +58,7 @@ services:
 
   fail2ban-docker:
     << : *fail2ban-common
-    container_name: ${FAIL2BAN_DOCKER_CONTAINER_NAME:-fail2ban-docker}
+    container_name: ${DOCKER_CONTAINER_NAME:-fail2ban-docker}
     environment:
       << : *environment-common
       F2B_IPTABLES_CHAIN: DOCKER-USER
@@ -78,10 +78,10 @@ services:
 
 volumes:
   data-input-vol:
-    name: ${FAIL2BAN_DATA_INPUT_VOL_NAME:-fail2ban-data-input-vol}
+    name: ${DATA_INPUT_VOL_NAME:-fail2ban-data-input-vol}
 
   data-docker-vol:
-    name: ${FAIL2BAN_DATA_DOCKER_VOL_NAME:-fail2ban-data-docker-vol}
+    name: ${DATA_DOCKER_VOL_NAME:-fail2ban-data-docker-vol}
 
   traefik-log-vol:
     name: ${TRAEFIK_LOG_VOL_NAME:-traefik-log-vol}
