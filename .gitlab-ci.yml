@@ -9,4 +9,5 @@ stages:
 .deploy:
   variables:
     FORCE_DOCKER_COMPOSE: 1
+    OMIT_CLEAN_DEPLOY: 1
     SERVICES_TO_CHECK: ${CI_PROJECT_NAME}-input ${CI_PROJECT_NAME}-docker
