@@ -43,7 +43,7 @@ x-environment:
 services:
   fail2ban-input:
     << : *fail2ban-common
-    container_name: ${INPUT_CONTAINER_NAME}
+    container_name: ${INPUT_CONTAINER_NAME:-fail2ban-input}
     environment:
       << : *environment-common
       F2B_IPTABLES_CHAIN: INPUT
@@ -58,7 +58,7 @@ services:
 
   fail2ban-docker:
     << : *fail2ban-common
-    container_name: ${DOCKER_CONTAINER_NAME}
+    container_name: ${DOCKER_CONTAINER_NAME:-fail2ban-docker}
     environment:
       << : *environment-common
       F2B_IPTABLES_CHAIN: DOCKER-USER
