@@ -10,12 +10,14 @@ stages:
   variables:
     FORCE_DOCKER_COMPOSE: 1
     OMIT_CLEAN_DEPLOY: 1
+    COMPOSE_FILE: docker-compose.fail2ban-common.yml:docker-compose.fail2ban-input.yml:docker-compose.fail2ban-docker.yml
     SERVICES_TO_CHECK: ${CI_PROJECT_NAME}-input ${CI_PROJECT_NAME}-docker
   environment:
     name: node1
 
 .deploy-secondary-node:
   variables: &deploy-secondary-node-variables
+    COMPOSE_FILE: docker-compose.fail2ban-common.yml:docker-compose.fail2ban-input.yml
     SERVICES_TO_DEPLOY: ${CI_PROJECT_NAME}-input
     SERVICES_TO_CHECK: ${CI_PROJECT_NAME}-input
 

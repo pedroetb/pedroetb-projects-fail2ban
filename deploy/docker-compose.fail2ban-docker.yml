@@ -1,0 +1,27 @@
+version: '2.4'
+
+services:
+  fail2ban-docker:
+    container_name: ${DOCKER_CONTAINER_NAME:-fail2ban-docker}
+    environment:
+      F2B_IPTABLES_CHAIN: DOCKER-USER
+    volumes:
+      - data-docker-vol:/data
+      - traefik-log-vol:/log/traefik:ro
+      - mail-log-vol:/log/mail:ro
+      - ./config/filter.d/traefik.conf:/data/filter.d/traefik.conf:ro
+      - ./config/jail.d/traefik.conf:/data/jail.d/traefik.conf:ro
+      - ./config/jail.d/mail.conf:/data/jail.d/mail.conf:ro
+      - ./config/action.d/tts.conf:/data/action.d/tts.conf:ro
+
+volumes:
+  data-docker-vol:
+    name: ${DATA_DOCKER_VOL_NAME:-fail2ban-data-docker-vol}
+
+  traefik-log-vol:
+    name: ${TRAEFIK_LOG_VOL_NAME:-traefik-log-vol}
+    external: true
+
+  mail-log-vol:
+    name: ${MAIL_LOG_VOL_NAME:-mail-log-vol}
+    external: true
