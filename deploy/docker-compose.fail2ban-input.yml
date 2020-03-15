@@ -8,6 +8,7 @@ services:
     volumes:
       - data-input-vol:/data
       - ${SSH_LOG_PATH:-/var/log}:/log/ssh:ro
+      - ./config/jail.d/default.conf:/data/jail.d/default.conf:ro
       - ./config/jail.d/ssh.conf:/data/jail.d/ssh.conf:ro
       - ./config/action.d/tts.conf:/data/action.d/tts.conf:ro
 
