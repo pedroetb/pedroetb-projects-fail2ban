@@ -10,7 +10,7 @@ docker exec -t <container> fail2ban-client status <jail>
 docker exec -t <container> fail2ban-client set <jail> unbanip <ip>
 
 # unban ip, all jails
-docker exec -t <container> fail2ban-client unbanip <ip>
+docker exec -t <container> fail2ban-client unban <ip>
 
 # unban all, all jails
 docker exec -t <container> fail2ban-client unban --all
