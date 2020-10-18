@@ -3,8 +3,6 @@ version: '2.4'
 services:
   fail2ban-docker:
     container_name: ${DOCKER_CONTAINER_NAME:-fail2ban-docker}
-    environment:
-      F2B_IPTABLES_CHAIN: DOCKER-USER
     volumes:
       - data-docker-vol:/data
       - traefik-log-vol:/log/traefik:ro

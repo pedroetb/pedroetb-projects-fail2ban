@@ -3,8 +3,6 @@ version: '2.4'
 services:
   fail2ban-input:
     container_name: ${INPUT_CONTAINER_NAME:-fail2ban-input}
-    environment:
-      F2B_IPTABLES_CHAIN: INPUT
     volumes:
       - data-input-vol:/data
       - ${SSH_LOG_PATH:-/var/log}:/log/ssh:ro
