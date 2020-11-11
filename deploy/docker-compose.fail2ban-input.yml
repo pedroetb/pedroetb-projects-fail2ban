@@ -9,6 +9,7 @@ services:
       - ./config/jail.d/default.conf:/data/jail.d/default.conf:ro
       - ./config/jail.d/ssh.conf:/data/jail.d/ssh.conf:ro
       - ./config/action.d/tts.conf:/data/action.d/tts.conf:ro
+      - ./config/action.d/sendmail-whois-lines.local:/data/action.d/sendmail-whois-lines.local:ro
 
 volumes:
   data-input-vol:

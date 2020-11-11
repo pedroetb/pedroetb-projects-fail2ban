@@ -1,0 +1,16 @@
+[Definition]
+
+actionban = ( printf %%b "Subject: [Fail2Ban] <name>: banned from <fq-hostname>
+	Date: `LC_ALL=C date +"%%a, %%d %%h %%Y %%T %%z"`
+	From: <sendername> <<sender>>
+	To: <dest>\n
+	Hi,\n
+	The IP <ip> has just been banned by Fail2Ban after
+	<failures> attempts against <name>.\n\n
+	Here is more information about <ip> :\n"
+	%(_whois_command)s;
+	printf %%b "\nLines containing failures of <ip> (max <grepmax>)\n";
+	%(_grep_logs)s;
+	printf %%b "\n
+	Regards,\n
+	Fail2Ban" ) | <mailcmd>
