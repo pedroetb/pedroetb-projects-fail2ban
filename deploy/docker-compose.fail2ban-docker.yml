@@ -3,6 +3,11 @@ version: '2.4'
 services:
   fail2ban-docker:
     container_name: ${DOCKER_CONTAINER_NAME:-fail2ban-docker}
+    environment:
+      MAX_RETRY: ${TRAEFIK_MAX_RETRY}
+      BAN_TIME: ${TRAEFIK_BAN_TIME}
+      FIND_TIME: ${TRAEFIK_FIND_TIME}
+      IGNORE_IP: ${TRAEFIK_IGNORE_IP}
     volumes:
       - data-docker-vol:/data
       - traefik-log-vol:/log/traefik:ro
