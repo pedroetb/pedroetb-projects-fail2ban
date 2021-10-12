@@ -2,7 +2,7 @@
 
 ## Common actions
 
-```
+```sh
 # get jail status
 docker exec -t <container> fail2ban-client status <jail>
 

@@ -8,7 +8,7 @@ services:
       - traefik-log-vol:/log/traefik:ro
       - ./config/filter.d/traefik.conf:/data/filter.d/traefik.conf:ro
       - ./config/jail.d/default.conf:/data/jail.d/default.conf:ro
-      - ./config/jail.d/traefik.conf:/data/jail.d/traefik.conf:ro
+      - ./config/jail.d/http.conf:/data/jail.d/http.conf:ro
       - ./config/action.d/tts.conf:/data/action.d/tts.conf:ro
       - ./config/action.d/sendmail-whois-lines.local:/data/action.d/sendmail-whois-lines.local:ro
 
