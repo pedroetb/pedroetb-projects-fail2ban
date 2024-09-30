@@ -1,5 +1,3 @@
-version: '2.4'
-
 x-fail2ban:
   &fail2ban-common
   image: ${IMAGE_NAME:-crazymax/fail2ban}:${IMAGE_TAG:-latest}
@@ -9,8 +7,8 @@ x-fail2ban:
     - NET_RAW
   restart: always
   cpus: '${CPUS:-0.5}'
-  mem_limit: ${MEM_LIMIT:-64M}
-  mem_reservation: ${MEM_RESERVATION:-32M}
+  mem_limit: ${MEM_LIMIT:-128M}
+  mem_reservation: ${MEM_RESERVATION:-64M}
 
 x-environment:
   &environment-common

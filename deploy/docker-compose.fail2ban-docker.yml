@@ -1,10 +1,8 @@
-version: '2.4'
-
 services:
   fail2ban-docker:
     container_name: ${DOCKER_CONTAINER_NAME:-fail2ban-docker}
     volumes:
-      - data-docker-vol:/data
+      - docker-data-vol:/data
       - traefik-log-vol:/log/traefik:ro
       - ./config/filter.d/traefik.conf:/data/filter.d/traefik.conf:ro
       - ./config/jail.d/default.conf:/data/jail.d/default.conf:ro
@@ -13,8 +11,8 @@ services:
       - ./config/action.d/sendmail-whois-lines.local:/data/action.d/sendmail-whois-lines.local:ro
 
 volumes:
-  data-docker-vol:
-    name: ${DATA_DOCKER_VOL_NAME:-fail2ban-data-docker-vol}
+  docker-data-vol:
+    name: ${DOCKER_DATA_VOL_NAME:-fail2ban-docker-data-vol}
 
   traefik-log-vol:
     name: ${TRAEFIK_LOG_VOL_NAME:-traefik-log-vol}
