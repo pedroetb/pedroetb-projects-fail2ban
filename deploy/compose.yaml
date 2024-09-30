@@ -57,7 +57,6 @@ services:
     << : *fail2ban-common
     environment:
       << : *environment-common
-    hostname: ${INPUT_HOSTNAME_PREFIX:-fail2ban-input}-{{.Node.Hostname}}
     volumes:
       - input-data-vol:/data
       - ${SSH_LOG_PATH:-/var/log}:/log/ssh:ro
@@ -82,7 +81,6 @@ services:
     << : *fail2ban-common
     environment:
       << : *environment-common
-    hostname: ${DOCKER_HOSTNAME:-fail2ban-docker}
     volumes:
       - docker-data-vol:/data
       - traefik-log-vol:/log/traefik:ro
