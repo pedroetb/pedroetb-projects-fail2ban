@@ -1,5 +1,7 @@
 # fail2ban
 
+Deployment of docker-fail2ban, a dockerized Fail2Ban daemon to ban hosts that cause multiple authentication errors
+
 ## Common actions
 
 ```sh
