@@ -18,8 +18,6 @@ stages:
     OMIT_CLEAN_DEPLOY: 1
     COMPOSE_FILE: compose.common.yaml:compose.input.yaml:compose.docker.yaml
     SERVICES_TO_CHECK: fail2ban-input fail2ban-docker
-  environment:
-    name: node1
 
 .deploy-secondary-node:
   variables: &deploy-secondary-node-variables
@@ -27,70 +25,100 @@ stages:
     SERVICES_TO_DEPLOY: fail2ban-input
     SERVICES_TO_CHECK: fail2ban-input
 
-.deploy-node2:
-  environment: &deploy-node2-environment
-    name: node2
+deploy-branch-lulu:
+  environment:
+    name: lulu-node1
 
-.deploy-node3:
-  environment: &deploy-node3-environment
-    name: node3
+deploy-tag-lulu:
+  environment:
+    name: lulu-node1
 
 deploy-node2-branch-lulu:
   extends: deploy-branch-lulu
   variables: *deploy-secondary-node-variables
-  environment: *deploy-node2-environment
+  environment:
+    name: lulu-node2
 
 deploy-node2-tag-lulu:
   extends: deploy-tag-lulu
   variables: *deploy-secondary-node-variables
-  environment: *deploy-node2-environment
+  environment:
+    name: lulu-node2
 
 deploy-node3-branch-lulu:
   extends: deploy-branch-lulu
   variables: *deploy-secondary-node-variables
-  environment: *deploy-node3-environment
+  environment:
+    name: lulu-node3
 
 deploy-node3-tag-lulu:
   extends: deploy-tag-lulu
   variables: *deploy-secondary-node-variables
-  environment: *deploy-node3-environment
+  environment:
+    name: lulu-node3
+
+
+deploy-branch-oracle:
+  environment:
+    name: oracle-node1
+
+deploy-tag-oracle:
+  environment:
+    name: oracle-node1
 
 deploy-node2-branch-oracle:
   extends: deploy-branch-oracle
   variables: *deploy-secondary-node-variables
-  environment: *deploy-node2-environment
+  environment:
+    name: oracle-node2
 
 deploy-node2-tag-oracle:
   extends: deploy-tag-oracle
   variables: *deploy-secondary-node-variables
-  environment: *deploy-node2-environment
+  environment:
+    name: oracle-node2
 
 deploy-node3-branch-oracle:
   extends: deploy-branch-oracle
   variables: *deploy-secondary-node-variables
-  environment: *deploy-node3-environment
+  environment:
+    name: oracle-node3
 
 deploy-node3-tag-oracle:
   extends: deploy-tag-oracle
   variables: *deploy-secondary-node-variables
-  environment: *deploy-node3-environment
+  environment:
+    name: oracle-node3
+
+
+deploy-branch-museo:
+  environment:
+    name: museo-node1
+
+deploy-tag-museo:
+  environment:
+    name: museo-node1
 
 deploy-node2-branch-museo:
   extends: deploy-branch-museo
   variables: *deploy-secondary-node-variables
-  environment: *deploy-node2-environment
+  environment:
+    name: museo-node2
 
 deploy-node2-tag-museo:
   extends: deploy-tag-museo
   variables: *deploy-secondary-node-variables
-  environment: *deploy-node2-environment
+  environment:
+    name: museo-node2
 
 deploy-node3-branch-museo:
   extends: deploy-branch-museo
   variables: *deploy-secondary-node-variables
-  environment: *deploy-node3-environment
+  environment:
+    name: museo-node3
 
 deploy-node3-tag-museo:
   extends: deploy-tag-museo
   variables: *deploy-secondary-node-variables
-  environment: *deploy-node3-environment
+  environment:
+    name: museo-node3
