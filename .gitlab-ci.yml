@@ -35,22 +35,62 @@ stages:
   environment: &deploy-node3-environment
     name: node3
 
-deploy-node2-branch:
-  extends: deploy-branch
+deploy-node2-branch-lulu:
+  extends: deploy-branch-lulu
   variables: *deploy-secondary-node-variables
   environment: *deploy-node2-environment
 
-deploy-node2-tag:
-  extends: deploy-tag
+deploy-node2-tag-lulu:
+  extends: deploy-tag-lulu
   variables: *deploy-secondary-node-variables
   environment: *deploy-node2-environment
 
-deploy-node3-branch:
-  extends: deploy-branch
+deploy-node3-branch-lulu:
+  extends: deploy-branch-lulu
   variables: *deploy-secondary-node-variables
   environment: *deploy-node3-environment
 
-deploy-node3-tag:
-  extends: deploy-tag
+deploy-node3-tag-lulu:
+  extends: deploy-tag-lulu
+  variables: *deploy-secondary-node-variables
+  environment: *deploy-node3-environment
+
+deploy-node2-branch-oracle:
+  extends: deploy-branch-oracle
+  variables: *deploy-secondary-node-variables
+  environment: *deploy-node2-environment
+
+deploy-node2-tag-oracle:
+  extends: deploy-tag-oracle
+  variables: *deploy-secondary-node-variables
+  environment: *deploy-node2-environment
+
+deploy-node3-branch-oracle:
+  extends: deploy-branch-oracle
+  variables: *deploy-secondary-node-variables
+  environment: *deploy-node3-environment
+
+deploy-node3-tag-oracle:
+  extends: deploy-tag-oracle
+  variables: *deploy-secondary-node-variables
+  environment: *deploy-node3-environment
+
+deploy-node2-branch-museo:
+  extends: deploy-branch-museo
+  variables: *deploy-secondary-node-variables
+  environment: *deploy-node2-environment
+
+deploy-node2-tag-museo:
+  extends: deploy-tag-museo
+  variables: *deploy-secondary-node-variables
+  environment: *deploy-node2-environment
+
+deploy-node3-branch-museo:
+  extends: deploy-branch-museo
+  variables: *deploy-secondary-node-variables
+  environment: *deploy-node3-environment
+
+deploy-node3-tag-museo:
+  extends: deploy-tag-museo
   variables: *deploy-secondary-node-variables
   environment: *deploy-node3-environment
