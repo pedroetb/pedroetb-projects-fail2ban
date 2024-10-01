@@ -3,6 +3,8 @@ x-fail2ban:
   image: ${IMAGE_NAME:-crazymax/fail2ban}:${IMAGE_TAG:-latest}
   networks:
     host-net:
+  dns:
+    - ${DNS:-10.0.0.1}
   cap_add:
     - NET_ADMIN
     - NET_RAW
