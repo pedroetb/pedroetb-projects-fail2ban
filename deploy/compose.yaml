@@ -1,0 +1,125 @@
+x-fail2ban:
+  &fail2ban-common
+  image: ${IMAGE_NAME:-crazymax/fail2ban}:${IMAGE_TAG:-latest}
+  networks:
+    host-net:
+  cap_add:
+    - NET_ADMIN
+    - NET_RAW
+
+x-environment:
+  &environment-common
+  TZ:
+  F2B_LOG_LEVEL:
+  F2B_DB_PURGE_AGE:
+  IPTABLES_MODE:
+  SSMTP_HOST:
+  SSMTP_PORT:
+  SSMTP_USER:
+  SSMTP_PASSWORD:
+  SSMTP_TLS:
+  SSMTP_STARTTLS:
+  EMAIL_RECIPIENT:
+  EMAIL_SENDER:
+  EMAIL_SENDER_NAME:
+
+x-deploy:
+  &deploy-common
+  restart_policy:
+    delay: ${RESTART_DELAY:-1s}
+  resources:
+    limits:
+      cpus: '${RESOURCES_LIMITS_CPUS:-0.5}'
+      memory: ${RESOURCES_LIMITS_MEMORY:-128M}
+    reservations:
+      cpus: '${RESOURCES_RESERVATIONS_CPUS:-0.001}'
+      memory: ${RESOURCES_RESERVATIONS_MEMORY:-64M}
+
+services:
+  fail2ban-input:
+    << : *fail2ban-common
+    environment:
+      << : *environment-common
+    volumes:
+      - input-data-vol:/data
+      - ${SSH_LOG_PATH:-/var/log}:/log/ssh:ro
+    configs:
+      - source: default-jail-config
+        target: /data/jail.d/default.conf
+        mode: 0400
+      - source: sendmail-action-config
+        target: /data/action.d/sendmail-whois-lines.local
+        mode: 0400
+      - source: ssh-jail-config
+        target: /data/jail.d/ssh.conf
+        mode: 0400
+    deploy:
+      << : *deploy-common
+      mode: global
+
+  fail2ban-docker:
+    << : *fail2ban-common
+    environment:
+      << : *environment-common
+    volumes:
+      - docker-data-vol:/data
+      - traefik-log-vol:/log/traefik:ro
+    configs:
+      - source: default-jail-config
+        target: /data/jail.d/default.conf
+        mode: 0400
+      - source: sendmail-action-config
+        target: /data/action.d/sendmail-whois-lines.local
+        mode: 0400
+      - source: traefik-filter-config
+        target: /data/filter.d/traefik.conf
+        mode: 0400
+      - source: http-jail-config
+        target: /data/jail.d/http.conf
+        mode: 0400
+    deploy:
+      << : *deploy-common
+      mode: replicated
+      replicas: ${DOCKER_REPLICAS:-1}
+      placement:
+        max_replicas_per_node: 1
+        constraints:
+          - ${DOCKER_PLACEMENT_CONSTRAINTS_NAME:-node.labels.gateway} ${DOCKER_PLACEMENT_CONSTRAINTS_OPERATOR:-==} ${DOCKER_PLACEMENT_CONSTRAINTS_VALUE:-1}
+
+networks:
+  host-net:
+    name: ${HOST_NET_NAME:-host}
+    driver: ${HOST_NET_DRIVER:-host}
+    external: true
+
+volumes:
+  input-data-vol:
+    name: ${INPUT_DATA_VOL_NAME:-fail2ban-input-data-vol}
+
+  docker-data-vol:
+    name: ${DOCKER_DATA_VOL_NAME:-fail2ban-docker-data-vol}
+
+  traefik-log-vol:
+    name: ${TRAEFIK_LOG_VOL_NAME:-traefik-log-vol}
+    external: true
+
+configs:
+  default-jail-config:
+    name: ${DEFAULT_JAIL_CONFIG_NAME:-fail2ban-default-jail-conf}
+    file: ./config/jail.d/default.conf
+
+  sendmail-action-config:
+    name: ${SENDMAIL_ACTION_CONFIG_NAME:-fail2ban-sendmail-action-conf}
+    file: ./config/action.d/sendmail-whois-lines.local
+
+  ssh-jail-config:
+    name: ${SSH_JAIL_CONFIG_NAME:-fail2ban-ssh-jail-conf}
+    file: ./config/jail.d/ssh.conf
+
+  traefik-filter-config:
+    name: ${TRAEFIK_FILTER_CONFIG_NAME:-fail2ban-traefik-filter-conf}
+    file: ./config/filter.d/traefik.conf
+
+  http-jail-config:
+    name: ${HTTP_JAIL_CONFIG_NAME:-fail2ban-http-jail-conf}
+    file: ./config/jail.d/http.conf
