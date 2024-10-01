@@ -22,25 +22,6 @@ x-environment:
   EMAIL_RECIPIENT:
   EMAIL_SENDER:
   EMAIL_SENDER_NAME:
-  TTS_DND_START:
-  TTS_DND_END:
-  DISABLE_TTS_START:
-  DISABLE_TTS_STOP:
-  DISABLE_TTS_BAN:
-  DISABLE_TTS_UNBAN:
-  TTS_START_TEXT:
-  TTS_STOP_TEXT:
-  TTS_BAN_TEXT:
-  TTS_UNBAN_TEXT:
-  TTS_URL:
-  TTS_USER:
-  TTS_PASS:
-  TTS_VOICE:
-  TTS_LANGUAGE:
-  TTS_PITCH:
-  TTS_TEMPO:
-  TTS_DELAY:
-  TTS_SLOW_READING:
 
 x-deploy:
   &deploy-common
@@ -66,9 +47,6 @@ services:
       - source: default-jail-config
         target: /data/jail.d/default.conf
         mode: 0400
-      - source: tts-action-config
-        target: /data/action.d/tts.conf
-        mode: 0400
       - source: sendmail-action-config
         target: /data/action.d/sendmail-whois-lines.local
         mode: 0400
@@ -89,9 +67,6 @@ services:
     configs:
       - source: default-jail-config
         target: /data/jail.d/default.conf
-        mode: 0400
-      - source: tts-action-config
-        target: /data/action.d/tts.conf
         mode: 0400
       - source: sendmail-action-config
         target: /data/action.d/sendmail-whois-lines.local
@@ -132,10 +107,6 @@ configs:
   default-jail-config:
     name: ${DEFAULT_JAIL_CONFIG_NAME:-fail2ban-default-jail-conf}
     file: ./config/jail.d/default.conf
-
-  tts-action-config:
-    name: ${TTS_ACTION_CONFIG_NAME:-fail2ban-tts-action-conf}
-    file: ./config/action.d/tts.conf
 
   sendmail-action-config:
     name: ${SENDMAIL_ACTION_CONFIG_NAME:-fail2ban-sendmail-action-conf}
