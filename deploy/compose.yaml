@@ -1,27 +1,25 @@
 x-fail2ban:
   &fail2ban-common
   image: ${IMAGE_NAME:-crazymax/fail2ban}:${IMAGE_TAG:-latest}
+  environment:
+    TZ:
+    F2B_LOG_LEVEL:
+    F2B_DB_PURGE_AGE:
+    IPTABLES_MODE:
+    SSMTP_HOST:
+    SSMTP_PORT:
+    SSMTP_USER:
+    SSMTP_PASSWORD:
+    SSMTP_TLS:
+    SSMTP_STARTTLS:
+    EMAIL_RECIPIENT:
+    EMAIL_SENDER:
+    EMAIL_SENDER_NAME:
   networks:
     host-net:
   cap_add:
     - NET_ADMIN
     - NET_RAW
-
-x-environment:
-  &environment-common
-  TZ:
-  F2B_LOG_LEVEL:
-  F2B_DB_PURGE_AGE:
-  IPTABLES_MODE:
-  SSMTP_HOST:
-  SSMTP_PORT:
-  SSMTP_USER:
-  SSMTP_PASSWORD:
-  SSMTP_TLS:
-  SSMTP_STARTTLS:
-  EMAIL_RECIPIENT:
-  EMAIL_SENDER:
-  EMAIL_SENDER_NAME:
 
 x-deploy:
   &deploy-common
@@ -38,8 +36,6 @@ x-deploy:
 services:
   fail2ban-input:
     << : *fail2ban-common
-    environment:
-      << : *environment-common
     volumes:
       - input-data-vol:/data
       - ${SSH_LOG_PATH:-/var/log}:/log/ssh:ro
@@ -59,8 +55,6 @@ services:
 
   fail2ban-docker:
     << : *fail2ban-common
-    environment:
-      << : *environment-common
     volumes:
       - docker-data-vol:/data
       - traefik-log-vol:/log/traefik:ro
