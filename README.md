@@ -20,11 +20,11 @@ This service is deployed using replicated mode with node label restrictions (a c
 
 ## Configuration
 
-You may define these environment variables:
+You may define these environment variables (**bold** are mandatory):
 
 | Variable name | Default value |
 | - | - |
-| *TZ* | `Atlantic/Canary` |
+| **TZ** | `Atlantic/Canary` |
 | *F2B_LOG_LEVEL* | `INFO` |
 | *F2B_DB_PURGE_AGE* | `15d` |
 | *IPTABLES_MODE* | `auto` |
@@ -34,8 +34,8 @@ You may define these environment variables:
 | *SSMTP_PASSWORD* | - |
 | *SSMTP_TLS* | `NO` |
 | *SSMTP_STARTTLS* | `NO` |
-| *EMAIL_RECIPIENT* | `user@example.org` |
-| *EMAIL_SENDER* | `fail2ban@change.me` |
+| **EMAIL_RECIPIENT** | `user@example.org` |
+| **EMAIL_SENDER** | `fail2ban@change.me` |
 | *EMAIL_SENDER_NAME* | `Fail2Ban` |
 
 > :bulb: There is also other environment variables used at compose file, but not propagated to deployed services. Check `deploy/compose.yaml` to inspect them.
