@@ -27,7 +27,7 @@ You may define these environment variables (**bold** are mandatory):
 | **TZ** | `Atlantic/Canary` |
 | *F2B_LOG_LEVEL* | `INFO` |
 | *F2B_DB_PURGE_AGE* | `15d` |
-| *IPTABLES_MODE* | `auto` |
+| *IPTABLES_MODE* | `nft` |
 | *SSMTP_HOST* | `localhost` |
 | *SSMTP_PORT* | `25` |
 | *SSMTP_USER* | - |
