@@ -89,12 +89,15 @@ networks:
 volumes:
   input-data-vol:
     name: ${INPUT_DATA_VOL_NAME:-fail2ban-input-data-vol}
+    driver: ${VOL_DRIVER}
 
   docker-data-vol:
     name: ${DOCKER_DATA_VOL_NAME:-fail2ban-docker-data-vol}
+    driver: ${VOL_DRIVER}
 
   traefik-log-vol:
     name: ${TRAEFIK_LOG_VOL_NAME:-traefik-log-vol}
+    driver: ${TRAEFIK_VOL_DRIVER:-local}
     external: true
 
 configs:
