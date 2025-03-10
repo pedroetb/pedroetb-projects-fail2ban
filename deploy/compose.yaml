@@ -97,7 +97,6 @@ volumes:
 
   traefik-log-vol:
     name: ${TRAEFIK_LOG_VOL_NAME:-traefik-log-vol}
-    driver: ${TRAEFIK_VOL_DRIVER:-local}
     external: true
 
 configs:
