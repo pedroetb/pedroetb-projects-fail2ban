@@ -12,11 +12,11 @@ Both are responsible for blocking unauthorized access by different protocols.
 
 ### fail2ban-input
 
-This service is deployed using global mode (a container for each Docker Swarm node), and is responsible for blocking unauthorized SSH login tries. Read logs from system on each node at `/var/log/auth.log`.
+This service is deployed using global mode (a container for each Docker Swarm node), and is responsible for blocking unauthorized SSH login tries. Reads logs from system on each node at `/var/log/auth.log`.
 
 ### fail2ban-docker
 
-This service is deployed using replicated mode with node label restrictions (a container for each Docker Swarm node meeting label requirements, with a configurable maximum number of replicas), and is responsible for blocking unauthorized HTTPS requests. Read logs from `traefik` on each node at local volume `traefik-log-vol`.
+This service is deployed using global mode with placement restrictions (a container for each Docker Swarm node meeting label requirements), and is responsible for blocking unauthorized HTTPS requests. Reads logs from `traefik` on each node at local volume `traefik-log-vol`.
 
 ## Configuration
 

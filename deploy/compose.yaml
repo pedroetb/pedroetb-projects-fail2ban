@@ -11,6 +11,9 @@ x-fail2ban:
   cap_add:
     - NET_ADMIN
     - NET_RAW
+  stop_grace_period: ${STOP_GRACE_PERIOD:-30s}
+  healthcheck:
+    disable: ${HEALTHCHECK_DISABLE:-false}
 
 x-deploy:
   &deploy-common
@@ -29,15 +32,15 @@ services:
   fail2ban-input:
     << : *fail2ban-common
     volumes:
-      - input-data-vol:/data
-      - input-run-vol:/var/run/fail2ban
+      - input-data-vol:${DATA_VOL_PATH}
+      - input-run-vol:${RUN_VOL_PATH}
       - ${SSH_LOG_PATH:-/var/log}:/log/ssh:ro
     configs:
       - source: default-jail-config
-        target: /data/jail.d/default.conf
+        target: ${DATA_VOL_PATH}/jail.d/default.conf
         mode: 0400
       - source: ssh-jail-config
-        target: /data/jail.d/ssh.conf
+        target: ${DATA_VOL_PATH}/jail.d/ssh.conf
         mode: 0400
     deploy:
       << : *deploy-common
@@ -45,24 +48,24 @@ services:
   fail2ban-docker:
     << : *fail2ban-common
     volumes:
-      - docker-data-vol:/data
-      - docker-run-vol:/var/run/fail2ban
+      - docker-data-vol:${DATA_VOL_PATH}
+      - docker-run-vol:${RUN_VOL_PATH}
       - traefik-log-vol:/log/traefik:ro
     configs:
       - source: default-jail-config
-        target: /data/jail.d/default.conf
+        target: ${DATA_VOL_PATH}/jail.d/default.conf
         mode: 0400
       - source: traefik-filter-config
-        target: /data/filter.d/traefik.conf
+        target: ${DATA_VOL_PATH}/filter.d/traefik.conf
         mode: 0400
       - source: http-jail-config
-        target: /data/jail.d/http.conf
+        target: ${DATA_VOL_PATH}/jail.d/http.conf
         mode: 0400
     deploy:
       << : *deploy-common
       placement:
         constraints:
-          - ${DOCKER_PLACEMENT_CONSTRAINTS_NAME:-node.labels.gateway} ${DOCKER_PLACEMENT_CONSTRAINTS_OPERATOR:-==} ${DOCKER_PLACEMENT_CONSTRAINTS_VALUE:-1}
+          - ${DOCKER_PLACEMENT_CONSTRAINTS_NAME} ${DOCKER_PLACEMENT_CONSTRAINTS_OPERATOR} ${DOCKER_PLACEMENT_CONSTRAINTS_VALUE}
 
 networks:
   host-net:
