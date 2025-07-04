@@ -14,6 +14,7 @@ x-fail2ban:
 
 x-deploy:
   &deploy-common
+  mode: global
   restart_policy:
     delay: ${RESTART_DELAY:-1s}
   resources:
@@ -29,6 +30,7 @@ services:
     << : *fail2ban-common
     volumes:
       - input-data-vol:/data
+      - input-run-vol:/var/run/fail2ban
       - ${SSH_LOG_PATH:-/var/log}:/log/ssh:ro
     configs:
       - source: default-jail-config
@@ -39,12 +41,12 @@ services:
         mode: 0400
     deploy:
       << : *deploy-common
-      mode: global
 
   fail2ban-docker:
     << : *fail2ban-common
     volumes:
       - docker-data-vol:/data
+      - docker-run-vol:/var/run/fail2ban
       - traefik-log-vol:/log/traefik:ro
     configs:
       - source: default-jail-config
@@ -58,10 +60,7 @@ services:
         mode: 0400
     deploy:
       << : *deploy-common
-      mode: replicated
-      replicas: ${DOCKER_REPLICAS:-1}
       placement:
-        max_replicas_per_node: 1
         constraints:
           - ${DOCKER_PLACEMENT_CONSTRAINTS_NAME:-node.labels.gateway} ${DOCKER_PLACEMENT_CONSTRAINTS_OPERATOR:-==} ${DOCKER_PLACEMENT_CONSTRAINTS_VALUE:-1}
 
@@ -78,6 +77,14 @@ volumes:
 
   docker-data-vol:
     name: ${DOCKER_DATA_VOL_NAME:-fail2ban-docker-data-vol}
+    driver: ${VOL_DRIVER}
+
+  input-run-vol:
+    name: ${INPUT_RUN_VOL_NAME:-fail2ban-input-run-vol}
+    driver: ${VOL_DRIVER}
+
+  docker-run-vol:
+    name: ${DOCKER_RUN_VOL_NAME:-fail2ban-docker-run-vol}
     driver: ${VOL_DRIVER}
 
   traefik-log-vol:
