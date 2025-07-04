@@ -8,7 +8,7 @@ This project is designed to deploy 2 different Docker Swarm services: `fail2ban-
 
 Two different services are needed because they work with different `iptables` *chains* (more info at <https://github.com/crazy-max/docker-fail2ban/blob/master/README.md#notes>) and have different deployment mode needs.
 
-Both are responsible for blocking different protocols unauthorized access and are able to notify events via email.
+Both are responsible for blocking unauthorized access by different protocols.
 
 ### fail2ban-input
 
@@ -28,15 +28,6 @@ You may define these environment variables (**bold** are mandatory):
 | *F2B_LOG_LEVEL* | `INFO` |
 | *F2B_DB_PURGE_AGE* | `15d` |
 | *IPTABLES_MODE* | `nft` |
-| *SSMTP_HOST* | `localhost` |
-| *SSMTP_PORT* | `25` |
-| *SSMTP_USER* | - |
-| *SSMTP_PASSWORD* | - |
-| *SSMTP_TLS* | `NO` |
-| *SSMTP_STARTTLS* | `NO` |
-| **EMAIL_RECIPIENT** | `user@example.org` |
-| **EMAIL_SENDER** | `fail2ban@change.me` |
-| *EMAIL_SENDER_NAME* | `Fail2Ban` |
 
 > :bulb: There is also other environment variables used at compose file, but not propagated to deployed services. Check `deploy/compose.yaml` to inspect them.
 
@@ -55,3 +46,8 @@ docker exec -t <container> fail2ban-client unban <ip>
 # unban all, all jails
 docker exec -t <container> fail2ban-client unban --all
 ```
+
+## References
+
+- Check `docker-fail2ban` official repository at <https://github.com/crazy-max/docker-fail2ban>.
+- Check `Fail2Ban` official repository at <https://github.com/fail2ban/fail2ban>.
